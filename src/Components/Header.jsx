@@ -6,16 +6,15 @@ import { toast } from "react-toastify";
 import designer from "../assets/Designer.png";
 import { TiThMenu } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
-import { FaUserCircle } from "react-icons/fa";
 
 function Header() {
   const { user, setUser } = useContext(UScontext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const [profiledetails,setProfiledetails]=useState({})
+  const [profileDetails, setProfileDetails] = useState({});
   const navigate = useNavigate();
   const profileRef = useRef();
-  // console.log(user);
+
   const handleLogout = async () => {
     try {
       const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/userlogout", {
@@ -27,16 +26,15 @@ function Header() {
       if (data.success) {
         toast.success(data.message);
         setUser(false);
+        navigate("/login");
       } else {
         toast.error(data.error);
       }
     } catch (error) {
       toast.error("Error during logout");
-      console.error("Error:", error);
     }
   };
 
-  // Close profile dropdown when clicked outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -47,127 +45,84 @@ function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(()=>{
-    const fetchcurrentuser = async () => {
-      try{
-
-      const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/getUser", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      const data = await res.json();
-      // console.log(data)
-      setProfiledetails(data.user)
-    }
-      catch(err){
-            console.log(err)
-            toast.error(err.message || "unable to fetch")
-      
-    }
-      
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/getUser", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        const data = await res.json();
+        setProfileDetails(data.user);
+      } catch (err) {
+        toast.error(err.message || "Unable to fetch user data");
+      }
     };
-    fetchcurrentuser();
-  },[profileOpen])
+    if (profileOpen) fetchCurrentUser();
+  }, [profileOpen]);
 
   const menuItems = (
     <>
-      <p
-        className="cursor-pointer hover:text-green-600"
-        onClick={() => {
-          navigate("/home");
-          setMenuOpen(false);
-        }}
-      >
-        Home
-      </p>
-      <p
-        className="cursor-pointer hover:text-green-600"
-        onClick={() => {
-          navigate("/products");
-          setMenuOpen(false);
-        }}
-      >
-        Products
-      </p>
-      <p
-        className="cursor-pointer hover:text-green-600"
-        onClick={() => {
-          navigate("/contactus");
-          setMenuOpen(false);
-        }}
-      >
-        Contact Us
-      </p>
-      <p
-        className="cursor-pointer hover:text-green-600"
-        onClick={() => {
-          navigate("/aboutus");
-          setMenuOpen(false);
-        }}
-      >
-        About Us
-      </p>
+      {["Home", "Products", "Contact Us", "About Us"].map((item, idx) => (
+        <p
+          key={idx}
+          className="cursor-pointer text-xl hover:text-green-600 transition-all"
+          onClick={() => {
+            navigate(`/${item.toLowerCase().replace(/\s/g, "")}`);
+            setMenuOpen(false);
+          }}
+        >
+          {item}
+        </p>
+      ))}
     </>
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-      <div className="flex justify-between items-center px-6 py-3 relative">
+    <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+      <div className="flex justify-between items-center  py-3  px-8 mx-auto relative">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/home")}>
           <img src={designer} alt="logo" className="w-10 h-10 object-contain" />
-          <h1 className="text-2xl font-bold text-green-600 tracking-wide">
-            DailyNeed
-          </h1>
+          <h1 className="text-2xl font-bold text-green-600">DailyNeed</h1>
         </div>
 
-        {/* Hamburger Icon for sm/md */}
-        <div
-          className="md:hidden text-3xl text-green-600 cursor-pointer"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+        {/* Mobile menu toggle */}
+        <div className="md:hidden text-3xl text-green-600 cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <RxCross2 /> : <TiThMenu />}
         </div>
 
-        {/* Menu for Desktop */}
-        {user && (
-          <div className="hidden md:flex gap-6 text-xl font-semibold text-gray-700">
-            {menuItems}
-          </div>
-        )}
+        {/* Desktop menu */}
+        <nav className="hidden md:flex gap-8 text-lg font-medium text-gray-700">{user && menuItems}</nav>
 
-        {/* Right side icons */}
+        {/* User Actions */}
         <div className="hidden md:flex items-center gap-5 relative">
           <ImCart
             className="text-2xl cursor-pointer hover:text-green-600 transition"
-            onClick={() =>user ? navigate("/cart") :toast.warning("Please Login to view cart")}
+            onClick={() => (user ? navigate("/cart") : toast.warning("Please login to view cart"))}
           />
           {user ? (
             <>
-              <div onClick={() => setProfileOpen(!profileOpen)}>
-                <img
-                  src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
-                  alt=""
-                  className="w-10"
-                />
-              </div>
-
+              <img
+                src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
+                alt="Profile"
+                className="w-10 cursor-pointer"
+                onClick={() => setProfileOpen(!profileOpen)}
+              />
               {profileOpen && (
                 <div
                   ref={profileRef}
-                  className="absolute top-12 right-0 bg-white shadow-lg rounded-xl p-4 w-64 z-50"
+                  className="absolute top-14 right-0 bg-white rounded-xl shadow-xl p-4 w-64 space-y-2"
                 >
-                  <p className="font-semibold text-gray-800">
-                    👤 {profiledetails.firstname + " " + profiledetails.lastname || "User Name"}
+                  <p className="text-lg font-semibold text-gray-800">
+                    👤 {profileDetails?.firstname + " " + profileDetails?.lastname || "User Name"}
                   </p>
-                  <p className="text-sm text-gray-500 mb-2">
-                    {profiledetails.email || "user@example.com"}
-                  </p>
-                  <hr className="my-2" />
+                  <p className="text-sm text-gray-500">{profileDetails?.email || "user@example.com"}</p>
+                  <hr />
                   <button
                     onClick={handleLogout}
-                    className="text-red-600 font-semibold hover:underline"
+                    className="w-full text-red-600 hover:text-red-700 font-semibold mt-2 text-left"
                   >
                     Logout
                   </button>
@@ -175,80 +130,59 @@ function Header() {
               )}
             </>
           ) : (
-            <p
-              className="text-lg font-bold text-green-700 cursor-pointer hover:underline"
+            <button
+              className="px-4 py-1 text-green-700 border border-green-600 rounded-full hover:bg-green-50 transition"
               onClick={() => navigate("/login")}
             >
               Login
-            </p>
+            </button>
           )}
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {menuOpen && user && (
-        <div className="md:hidden px-6 pb-4 flex flex-col gap-4 text-lg font-medium bg-white shadow-inner z-40">
+        <div className="md:hidden px-6 py-4 space-y-4 text-base font-medium bg-white shadow-inner">
           {menuItems}
-          <div className="flex items-center justify-between pt-4">
+          <div className="flex items-center justify-between">
             <ImCart
-              className="text-2xl cursor-pointer hover:text-green-600 transition"
+              className="text-2xl cursor-pointer hover:text-green-600"
               onClick={() => {
                 navigate("/cart");
                 setMenuOpen(false);
               }}
             />
-            <div onClick={() => setProfileOpen(!profileOpen)}>
-              <img
-                src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
-                alt=""
-                className="w-10"
-              />
-            </div>
-            {profileOpen && (
-              <div
-                ref={profileRef}
-                className="absolute top-12 right-0 bg-white shadow-lg rounded-xl p-4 w-64 z-50"
-              >
-                <p className="font-semibold text-gray-800">
-                  👤 {user.name || "User Name"}
-                </p>
-                <p className="text-sm text-gray-500 mb-2">
-                  {user.email || "user@example.com"}
-                </p>
-                <hr className="my-2" />
-                <button
-                  onClick={handleLogout}
-                  className="text-red-600 font-semibold hover:underline"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-            {user ? (
-              <p
-                className="text-red-600 font-semibold cursor-pointer hover:underline"
+            <img
+              src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
+              alt="Profile"
+              className="w-10 cursor-pointer"
+              onClick={() => setProfileOpen(!profileOpen)}
+            />
+          </div>
+          {profileOpen && (
+            <div
+              ref={profileRef}
+              className="mt-2 bg-white shadow-lg rounded-xl p-4 w-full space-y-2"
+            >
+              <p className="text-md font-semibold text-gray-800">
+                👤 {profileDetails?.firstname + " " + profileDetails?.lastname || "User Name"}
+              </p>
+              <p className="text-sm text-gray-500">{profileDetails?.email || "user@example.com"}</p>
+              <hr />
+              <button
                 onClick={() => {
                   handleLogout();
                   setMenuOpen(false);
                 }}
+                className="text-red-600 font-semibold hover:underline"
               >
                 Logout
-              </p>
-            ) : (
-              <p
-                className="text-green-700 font-semibold cursor-pointer hover:underline"
-                onClick={() => {
-                  navigate("/login");
-                  setMenuOpen(false);
-                }}
-              >
-                Login
-              </p>
-            )}
-          </div>
+              </button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </header>
   );
 }
 
