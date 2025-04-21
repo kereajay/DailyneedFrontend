@@ -26,11 +26,12 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const { user, setUser } = useContext(UScontext);
 
+
   useEffect(() => {
     const productdata = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3300/api/v1/products/getallproducts",
+          "https://dailyneedbackend.onrender.com/api/v1/products/getallproducts",
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -52,7 +53,7 @@ const Home = () => {
       toast.warning("please login to add to cart");
     } else {
       try {
-        const res = await fetch("http://localhost:3300/api/v1/cart/addtocart", {
+        const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/cart/addtocart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

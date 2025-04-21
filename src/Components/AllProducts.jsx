@@ -20,7 +20,7 @@ function AllProducts({ product, title }) {
   const handleaddtocart=async(productId)=>{
     console.log(productId)
   
-        const res = await fetch("http://localhost:3300/api/v1/cart/addtocart", {
+        const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/cart/addtocart", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body:JSON.stringify({productId,quantity:1}),

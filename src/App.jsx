@@ -81,7 +81,7 @@ const App = () => {
   const { user, setUser, shopkeeper, setShopkeeper } = useContext(UScontext);
     useEffect(() => {
       const fetchcurrentuser = async () => {
-        const res = await fetch("http://localhost:3300/api/v1/user/getUser", {
+        const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/getUser", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -102,7 +102,7 @@ const App = () => {
       //fetch shopkeeper
       // const fetchcurrentShopkeeper = async () => {
       //   const res = await fetch(
-      //     "http://localhost:3300/api/v1/user/getShopkeeper",
+      //     "https://dailyneedbackend.onrender.com/api/v1/user/getShopkeeper",
       //     {
       //       method: "GET",
       //       headers: { "Content-Type": "application/json" },

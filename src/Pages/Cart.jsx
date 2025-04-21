@@ -7,7 +7,7 @@ function Cart() {
   const [grandtotal, setGrandtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const fetchcart = async () => {
-    const res = await fetch("http://localhost:3300/api/v1/cart/getcart", {
+    const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/cart/getcart", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
 
@@ -40,7 +40,7 @@ function Cart() {
   const increasequantity = async (productId) => {
     // console.log(productId);
 
-    const res = await fetch("http://localhost:3300/api/v1/cart/addtocart", {
+    const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/cart/addtocart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ productId, quantity: 1 }),
@@ -58,7 +58,7 @@ function Cart() {
     // console.log(productId);
 
     const res = await fetch(
-      "http://localhost:3300/api/v1/cart/reduce/quantity",
+      "https://dailyneedbackend.onrender.com/api/v1/cart/reduce/quantity",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -76,7 +76,7 @@ function Cart() {
   };
   const RemoveProduct = async (productId) => {
     const res = await fetch(
-      "http://localhost:3300/api/v1/cart/product/remove",
+      "https://dailyneedbackend.onrender.com/api/v1/cart/product/remove",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,7 +94,7 @@ function Cart() {
 
   const handlepayment = async () => {
     try {
-      const res = await fetch("http://localhost:3300/api/v1/payment/order", {
+      const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/payment/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ grandtotal }),
@@ -146,7 +146,7 @@ function Cart() {
 
         try {
           const res = await fetch(
-            "http://localhost:3300/api/v1/payment/verify",
+            "https://dailyneedbackend.onrender.com/api/v1/payment/verify",
             {
               method: "POST",
               headers: {

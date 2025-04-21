@@ -24,7 +24,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3300/api/v1/user/signup", {
+      const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

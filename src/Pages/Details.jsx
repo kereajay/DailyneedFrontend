@@ -22,7 +22,7 @@ function Details() {
   const getproductsdetails = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3300/api/v1/products/getproduct/${pid}`,
+        `https://dailyneedbackend.onrender.com/api/v1/products/getproduct/${pid}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -46,7 +46,7 @@ function Details() {
   const allproductdata = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3300/api/v1/products/getallproducts",
+        "https://dailyneedbackend.onrender.com/api/v1/products/getallproducts",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -77,7 +77,7 @@ function Details() {
   }, [productdetails]);
 
   const handleaddtocart = async (productId) => {
-    const res = await fetch("http://localhost:3300/api/v1/cart/addtocart", {
+    const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/cart/addtocart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ productId, quantity: 1 }),

@@ -18,7 +18,7 @@ function Header() {
   // console.log(user);
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3300/api/v1/user/userlogout", {
+      const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/userlogout", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -51,7 +51,7 @@ function Header() {
     const fetchcurrentuser = async () => {
       try{
 
-      const res = await fetch("http://localhost:3300/api/v1/user/getUser", {
+      const res = await fetch("https://dailyneedbackend.onrender.com/api/v1/user/getUser", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
