@@ -8,7 +8,7 @@ import image5 from "../assets/Scrollimages/image5.jpg";
 import image6 from "../assets/Scrollimages/image6.jpg";
 import image7 from "../assets/Scrollimages/image7.jpg";
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoStar } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { UScontext } from "../main";
@@ -25,6 +25,7 @@ const responsive = {
 const Home = () => {
   const [products, setProducts] = useState([]);
   const { user, setUser } = useContext(UScontext);
+  const navigate=useNavigate();
 
 
   useEffect(() => {
@@ -70,6 +71,14 @@ const Home = () => {
       }
     }
   };
+  const handledetailspage=(id)=>{
+     if(!user){
+      toast.warning("please login to continue")
+     }
+     else{
+           navigate(`/details/${id}`)
+     }
+  }
 
   return (
     <>
@@ -113,13 +122,14 @@ const Home = () => {
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow border border-gray-200"
               >
                 <div className="h-64 overflow-hidden flex items-center justify-center bg-gray-50 rounded-t-xl">
-                  <Link to={`/details/${item._id}`}>
+                  {/* <Link to={`/details/${item._id}`}> */}
                     <img
+                    onClick={()=>handledetailspage(item._id)}
                       src={item.image}
                       alt={item.name}
                       className="h-full w-full object-contain hover:scale-110 transition-transform duration-300"
                     />
-                  </Link>
+                  {/* </Link> */}
                 </div>
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-800">

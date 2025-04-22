@@ -49,7 +49,7 @@ export const categoreyArray=[
     },
     {
         id:9,
-        imageurl:"",
+        imageurl:"https://thumbs.dreamstime.com/b/assorted-grocery-products-white-including-vegetables-fruits-wine-bread-dairy-meat-30559919.jpg",
         name:"All"
     },
 
