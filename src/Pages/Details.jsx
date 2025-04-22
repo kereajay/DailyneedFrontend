@@ -79,7 +79,7 @@ function Details() {
       );
       const data = await res.json();
       if (data?.success === true) {
-        toast.success("Added to cart");
+        toast.success("Item Added to cart");
       } else {
         toast.error(data?.message || "Failed to add to cart");
       }

@@ -35,7 +35,7 @@ function Login() {
   
       // Check if login is successful before accessing user data
       if (!res.ok) {
-        toast.error(data.message || "Login failed!");
+        toast.error(data.message || "Login failed! please try again");
         return;
       }
   

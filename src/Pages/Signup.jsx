@@ -36,7 +36,7 @@ function Signup() {
         navigate("/login")
         setFormData({});
       } else {
-        toast.error(data.message || "Signup failed!");
+        toast.error(data.message || "Signup failed! try again");
       }
     } catch (error) {
       toast.error("Error during signup");

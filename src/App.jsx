@@ -93,7 +93,7 @@ const App = () => {
           // localStorage.setItem("user", JSON.stringify(data.user))
           // navigate("/")
         } else {
-          toast.warning("please continue to login");
+          toast.warning("please login to continue");
         }
         // console.log(data)
       };

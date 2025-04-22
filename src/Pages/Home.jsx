@@ -63,7 +63,7 @@ const Home = () => {
 
         const data = await res.json();
         if (data?.success) {
-          toast.success("Added to cart");
+          toast.success("Item Added to cart");
         }
       } catch (err) {
         console.log(err.message);

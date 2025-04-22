@@ -52,7 +52,7 @@ function Products() {
     });
     const data = await res.json();
     if (data?.success === true) {
-      toast.success("Added to cart");
+      toast.success("Item Added to cart");
     }
   };
 
