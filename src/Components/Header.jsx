@@ -30,6 +30,7 @@ function Header() {
         toast.success(data.message);
         setUser(false);
         navigate("/login");
+        setProfileOpen(false);
       } else {
         toast.error(data.error);
       }
@@ -65,7 +66,7 @@ function Header() {
         toast.error(err.message || "Unable to fetch user data");
       }
     };
-    if (profileOpen) fetchCurrentUser();
+    fetchCurrentUser();
   }, [profileOpen]);
 
   const menuItems = (
@@ -85,9 +86,33 @@ function Header() {
     </>
   );
 
+  const profileDropdown = (
+    <div
+      ref={profileRef}
+      className="absolute md:absolute md:top-14 md:right-0 bg-white rounded-xl shadow-xl p-4 w-64 space-y-2 z-50"
+    >
+      <p className="text-lg font-semibold text-gray-800">
+        👤{" "}
+        {profileDetails?.firstname && profileDetails?.lastname
+          ? profileDetails.firstname + " " + profileDetails.lastname
+          : "User Name"}
+      </p>
+      <p className="text-sm text-gray-500">
+        {profileDetails?.email || "user@example.com"}
+      </p>
+      <hr />
+      <button
+        onClick={handleLogout}
+        className="w-full text-red-600 hover:text-red-700 font-semibold mt-2 text-left"
+      >
+        Logout
+      </button>
+    </div>
+  );
+
   return (
     <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="flex justify-between items-center  py-3  px-8 mx-auto relative">
+      <div className="flex justify-between items-center py-3 px-8 mx-auto relative">
         {/* Logo */}
         <div
           className="flex items-center space-x-2 cursor-pointer"
@@ -110,7 +135,7 @@ function Header() {
           {user && menuItems}
         </nav>
 
-        {/* User Actions */}
+        {/* Desktop user actions */}
         <div className="hidden md:flex items-center gap-5 relative">
           <ImCart
             className="text-2xl cursor-pointer hover:text-green-600 transition"
@@ -126,31 +151,9 @@ function Header() {
                 src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
                 alt="Profile"
                 className="w-10 cursor-pointer"
-                onClick={() => setProfileOpen(!profileOpen)}
+                onClick={() => setProfileOpen((prev) => !prev)}
               />
-              {profileOpen && (
-                <div
-                  ref={profileRef}
-                  className="absolute top-14 right-0 bg-white rounded-xl shadow-xl p-4 w-64 space-y-2"
-                >
-                  <p className="text-lg font-semibold text-gray-800">
-                    👤{" "}
-                    {profileDetails?.firstname +
-                      " " +
-                      profileDetails?.lastname || "User Name"}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {profileDetails?.email || "user@example.com"}
-                  </p>
-                  <hr />
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-red-600 hover:text-red-700 font-semibold mt-2 text-left"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
+              {profileOpen && profileDropdown}
             </>
           ) : (
             <button
@@ -163,20 +166,21 @@ function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden px-6 py-4 space-y-4 text-base font-medium bg-white shadow-inner">
           {!user ? (
             <div
               className="border border-green-400 space-y-4 text-lg font-semibold w-24 text-center rounded-3xl"
               onClick={() => {
-                navigate("/login"), setMenuOpen(!menuOpen);
+                navigate("/login");
+                setMenuOpen(false);
               }}
             >
               <Link to={"/login"}>Login</Link>
             </div>
           ) : (
-            <div className="md:hidden px-6 py-4 space-y-4 text-base font-medium bg-white shadow-inner">
+            <>
               {menuItems}
               <div className="flex items-center justify-between">
                 <ImCart
@@ -190,7 +194,7 @@ function Header() {
                   src="https://cdn-icons-gif.flaticon.com/8121/8121295.gif"
                   alt="Profile"
                   className="w-10 cursor-pointer"
-                  onClick={() => setProfileOpen(!profileOpen)}
+                  onClick={() => setProfileOpen((prev) => !prev)}
                 />
               </div>
               {profileOpen && (
@@ -200,9 +204,9 @@ function Header() {
                 >
                   <p className="text-md font-semibold text-gray-800">
                     👤{" "}
-                    {profileDetails?.firstname +
-                      " " +
-                      profileDetails?.lastname || "User Name"}
+                    {profileDetails?.firstname && profileDetails?.lastname
+                      ? profileDetails.firstname + " " + profileDetails.lastname
+                      : "User Name"}
                   </p>
                   <p className="text-sm text-gray-500">
                     {profileDetails?.email || "user@example.com"}
@@ -219,7 +223,7 @@ function Header() {
                   </button>
                 </div>
               )}
-            </div>
+            </>
           )}
         </div>
       )}
